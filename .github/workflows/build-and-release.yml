@@ -8,7 +8,7 @@ on:
 
 env:
   PYTHON_VERSION: 3.13.3
-  FLUTTER_VERSION: 3.32.0
+  FLUTTER_VERSION: 3.29.2
   PYTHONIOENCODING: utf-8
 
 jobs:
@@ -38,6 +38,7 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
 
       - name: Build app
+        shell: bash
         run: |
           flutter config --no-analytics
           if [[ "$RUNNER_OS" == "Windows" ]]; then
