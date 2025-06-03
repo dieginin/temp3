@@ -50,16 +50,16 @@ jobs:
       - name: List build folders separately
         if: always()
         run: |
-          echo "📦 dist/"
+          echo "📦 build/"
           if [[ "$RUNNER_OS" == "Windows" ]]; then
-            dir dist /s
-            echo "📦 dist\\windows\\"
-            dir dist\\windows /s
+            dir build /s
+            echo "📦 build\\windows\\"
+            dir build\\windows /s
           elif [[ "$RUNNER_OS" == "macOS" ]]; then
-            echo "📦 dist/"
-            tree dist || find dist
-            echo "📦 dist/macos/"
-            tree dist/macos || find dist/macos
+            echo "📦 build/"
+            tree build || find build
+            echo "📦 build/macos/"
+            tree build/macos || find build/macos
           fi
 
       - name: Read project info from TOML
@@ -90,7 +90,7 @@ jobs:
             echo '[Languages]' >> installer.iss
             echo 'Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"' >> installer.iss
             echo '[Files]' >> installer.iss
-            echo 'Source: "dist\windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs' >> installer.iss
+            echo 'Source: "build\windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs' >> installer.iss
             echo '[Icons]' >> installer.iss
             echo 'Name: "{commondesktop}\${{ env.PROJECT }}"; Filename: "{app}\${{ env.PROJECT }}.exe"' >> installer.iss
             echo 'Name: "{group}\${{ env.PROJECT }}"; Filename: "{app}\${{ env.PROJECT }}.exe"' >> installer.iss
@@ -108,8 +108,8 @@ jobs:
               --icon "${{ env.PROJECT }}.app" 200 190 \
               --hide-extension "${{ env.PROJECT }}.app" \
               --app-drop-link 600 185 \
-              "dist/${{ env.PROJECT }}-macOS.dmg" \
-              "dist/macos/${{ env.PROJECT }}.app"
+              "build/${{ env.PROJECT }}-macOS.dmg" \
+              "build/macos/${{ env.PROJECT }}.app"
           fi
 
       - name: Upload artifact
@@ -117,8 +117,8 @@ jobs:
         with:
           name: build-${{ runner.os }}
           path: |
-            dist/*.msi
-            dist/*.dmg
+            build/*.msi
+            build/*.dmg
 
   release:
     needs: build
