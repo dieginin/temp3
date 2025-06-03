@@ -56,7 +56,7 @@ jobs:
           with open('pyproject.toml', 'rb') as f:
               config = tomli.load(f)
               print(f'PROJECT={config[\"project\"][\"name\"]}')
-              print(f'COMPANY={config[\"project\"][\"company\"]}')
+              print(f'COMPANY={config[\"tool.flet\"][\"company\"]}')
           " >> $GITHUB_ENV
 
       - name: Create installer
