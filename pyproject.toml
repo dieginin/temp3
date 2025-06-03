@@ -1,0 +1,13 @@
+[project]
+name = "temp3"
+version = "0.0.1"
+description = "My temp app"
+requires-python = ">=3.9"
+authors = [{ name = "NextBale", email = "diegobalestra9@gmail.com" }]
+dependencies = ["flet==0.28.3"]
+
+[tool.flet]
+org = "com.nextbale"
+product = "temp3"                            # Display name
+company = "NextBale"
+copyright = "Copyright (C) 2025 by NextBale"
