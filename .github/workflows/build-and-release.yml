@@ -27,6 +27,11 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
       - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
         uses: subosito/flutter-action@v2
         with:
@@ -94,7 +99,7 @@ jobs:
         with:
           name: build-${{ runner.os }}
           path: |
-            build/*.exe
+            build/*.msi
             build/*.dmg
 
   release:
