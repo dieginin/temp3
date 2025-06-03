@@ -93,14 +93,6 @@ jobs:
               "build/macos/${{ env.PROJECT }}.app"
           fi
 
-      - name: List build folders separately
-        shell: bash
-        run: |
-          if [[ "$RUNNER_OS" == "Windows" ]]; then
-            echo "📦 build/"
-            dir /s build
-          fi
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
