@@ -41,9 +41,9 @@ jobs:
           echo "VERSION = '$(echo ${{ github.ref_name }} | sed 's/^v//')'" > src/version.py
           flutter config --no-analytics
           if [[ "$RUNNER_OS" == "Windows" ]]; then
-            flet build windows --verbose --no-rich-output
+            flet build windows --verbose
           elif [[ "$RUNNER_OS" == "macOS" ]]; then
-            flet build macos --verbose --no-rich-output
+            flet build macos --verbose
           fi
           pip install tomli
           python -c "
@@ -63,7 +63,7 @@ jobs:
             echo 'AppName=${{ env.PROJECT }}' >> installer.iss
             echo 'AppVersion=${{ github.ref_name }}' >> installer.iss
             echo 'AppPublisher=${{ env.COMPANY }}' >> installer.iss
-            echo 'DefaultDirName={pf}\${{ env.PROJECT }}' >> installer.iss
+            echo 'DefaultDirName={auto}\${{ env.PROJECT }}' >> installer.iss
             echo 'DefaultGroupName=${{ env.PROJECT }}' >> installer.iss
             echo 'OutputBaseFilename=${{ env.PROJECT }}-Windows' >> installer.iss
             echo 'Compression=lzma2' >> installer.iss
@@ -98,8 +98,7 @@ jobs:
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
             echo "📦 build/"
-            dir build
-            dir build\windows
+            dir /s build
           fi
 
       - name: Upload artifact
@@ -107,7 +106,7 @@ jobs:
         with:
           name: build-${{ runner.os }}
           path: |
-            build/*.exe
+            build/windows/*.exe
             build/*.dmg
 
   release:
