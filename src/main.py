@@ -1,7 +1,7 @@
 import flet as ft
 
-from config import VERSION
 from controllers import Updater
+from version import VERSION
 
 
 def main(page: ft.Page) -> None:

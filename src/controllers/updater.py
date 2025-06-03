@@ -11,7 +11,7 @@ import requests
 
 from components import Subtitle as Text
 from components import accept_dialog, error_snackbar, info_snackbar, success_snackbar
-from config import VERSION
+from version import VERSION
 
 
 def get_latest_version() -> tuple[str, str]:

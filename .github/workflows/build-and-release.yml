@@ -40,6 +40,7 @@ jobs:
       - name: Build app
         shell: bash
         run: |
+          echo "VERSION = '$(echo ${{ github.ref_name }} | sed 's/^v//')'" > version.py
           flutter config --no-analytics
           if [[ "$RUNNER_OS" == "Windows" ]]; then
             flet build windows --verbose
@@ -99,7 +100,7 @@ jobs:
         with:
           name: build-${{ runner.os }}
           path: |
-            build/*.msi
+            build/*.exe
             build/*.dmg
 
   release:
