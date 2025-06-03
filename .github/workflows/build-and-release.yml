@@ -47,6 +47,55 @@ jobs:
             flet build macos --verbose
           fi
 
+      - name: Read project info from TOML
+        id: read_project_info
+        run: |
+          pip install tomli
+          python -c "
+          import tomli
+          with open('pyproject.toml', 'rb') as f:
+              config = tomli.load(f)
+              print(f'PROJECT={config[\"project\"][\"name\"]}')
+              print(f'COMPANY={config[\"project\"][\"company\"]}')
+          " >> $GITHUB_ENV
+
+      - name: Create installer
+        run: |
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            echo '[Setup]' > installer.iss
+            echo 'AppName=${{ env.PROJECT }}' >> installer.iss
+            echo 'AppVersion=${{ github.ref_name }}' >> installer.iss
+            echo 'AppPublisher=${{ env.COMPANY }}' >> installer.iss
+            echo 'DefaultDirName={pf}\${{ env.PROJECT }}' >> installer.iss
+            echo 'DefaultGroupName=${{ env.PROJECT }}' >> installer.iss
+            echo 'OutputBaseFilename=${{ env.PROJECT }}-Windows' >> installer.iss
+            echo 'Compression=lzma2' >> installer.iss
+            echo 'SolidCompression=yes' >> installer.iss
+            echo '[Languages]' >> installer.iss
+            echo 'Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"' >> installer.iss
+            echo '[Files]' >> installer.iss
+            echo 'Source: "dist\windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs' >> installer.iss
+            echo '[Icons]' >> installer.iss
+            echo 'Name: "{commondesktop}\${{ env.PROJECT }}"; Filename: "{app}\${{ env.PROJECT }}.exe"' >> installer.iss
+            echo 'Name: "{group}\${{ env.PROJECT }}"; Filename: "{app}\${{ env.PROJECT }}.exe"' >> installer.iss
+            echo 'Name: "{group}\Desinstalar ${{ env.PROJECT }}"; Filename: "{uninstallexe}"' >> installer.iss
+            echo '[Run]' >> installer.iss
+            echo 'Filename: "{app}\${{ env.PROJECT }}.exe"; Description: "Ejecutar ${{ env.PROJECT }}"; Flags: postinstall skipifsilent' >> installer.iss
+            iscc installer.iss
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            brew install create-dmg
+            create-dmg \
+              --volname "${{ env.PROJECT }} Installer" \
+              --window-pos 200 120 \
+              --window-size 800 400 \
+              --icon-size 100 \
+              --icon "${{ env.PROJECT }}.app" 200 190 \
+              --hide-extension "${{ env.PROJECT }}.app" \
+              --app-drop-link 600 185 \
+              "dist/${{ env.PROJECT }}-macOS.dmg" \
+              "dist/macos/${{ env.PROJECT }}.app"
+          fi
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
