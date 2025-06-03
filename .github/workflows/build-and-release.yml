@@ -94,7 +94,7 @@ jobs:
         with:
           name: build-${{ runner.os }}
           path: |
-            build/*.msi
+            build/*.exe
             build/*.dmg
 
   release:
