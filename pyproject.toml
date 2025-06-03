@@ -1,6 +1,6 @@
 [project]
 name = "temp3"
-version = "0.0.9"
+version = "0.1.0"
 description = "My temp app"
 requires-python = ">=3.9"
 authors = [{ name = "NextBale", email = "diegobalestra9@gmail.com" }]
@@ -11,6 +11,4 @@ org = "com.nextbale"
 product = "temp3"                            # Display name
 company = "NextBale"
 copyright = "Copyright (C) 2025 by NextBale"
-
-[tool.flet.app]
-path = "src"
+app.path = "src"

@@ -47,21 +47,6 @@ jobs:
             flet build macos --verbose
           fi
 
-      - name: List build folders separately
-        if: always()
-        run: |
-          echo "📦 build/"
-          if [[ "$RUNNER_OS" == "Windows" ]]; then
-            dir build /s
-            echo "📦 build\\windows\\"
-            dir build\\windows /s
-          elif [[ "$RUNNER_OS" == "macOS" ]]; then
-            echo "📦 build/"
-            tree build || find build
-            echo "📦 build/macos/"
-            tree build/macos || find build/macos
-          fi
-
       - name: Read project info from TOML
         id: read_project_info
         run: |
