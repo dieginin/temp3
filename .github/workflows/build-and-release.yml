@@ -47,6 +47,21 @@ jobs:
             flet build macos --verbose
           fi
 
+      - name: List build folders separately
+        if: always()
+        run: |
+          echo "📦 dist/"
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            dir dist /s
+            echo "📦 dist\\windows\\"
+            dir dist\\windows /s
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            echo "📦 dist/"
+            tree dist || find dist
+            echo "📦 dist/macos/"
+            tree dist/macos || find dist/macos
+          fi
+
       - name: Read project info from TOML
         id: read_project_info
         run: |
@@ -81,7 +96,7 @@ jobs:
             echo 'Name: "{group}\${{ env.PROJECT }}"; Filename: "{app}\${{ env.PROJECT }}.exe"' >> installer.iss
             echo 'Name: "{group}\Desinstalar ${{ env.PROJECT }}"; Filename: "{uninstallexe}"' >> installer.iss
             echo '[Run]' >> installer.iss
-            echo 'Filename: "{app}\${{ env.PROJECT }}.exe"; Description: "Ejecutar ${{ env.PROJECT }}"; Flags: postinstall skipifsilent' >> installer.iss
+            echo 'Filename: "{app}\${{ env.PROJECT }}.exe"; Description: "Run ${{ env.PROJECT }}"; Flags: postinstall skipifsilent' >> installer.iss
             iscc installer.iss
           elif [[ "$RUNNER_OS" == "macOS" ]]; then
             brew install create-dmg
