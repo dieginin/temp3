@@ -52,7 +52,7 @@ jobs:
           import tomli
           with open('pyproject.toml', 'rb') as f:
               config = tomli.load(f)
-              print(f'PROJECT={config[\"project\"][\"name\"]}')
+              print(f'PROJECT={config[\"tool\"][\"flet\"][\"product\"]}')
               print(f'COMPANY={config[\"tool\"][\"flet\"][\"company\"]}')
           " >> $GITHUB_ENV
 
@@ -94,6 +94,22 @@ jobs:
               "build/${{ env.PROJECT }}-macOS.dmg" \
               "build/macos/${{ env.PROJECT }}.app"
           fi
+
+      - name: List build folders separately
+        if: always()
+        run: |
+          echo "📦 build/"
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            dir build /s
+            echo "📦 build\\windows\\"
+            dir build\\windows /s
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            echo "📦 build/"
+            tree build || find build
+            echo "📦 build/macos/"
+            tree build/macos || find build/macos
+          fi
+
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
