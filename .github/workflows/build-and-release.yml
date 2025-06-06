@@ -20,15 +20,15 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Setup Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v5.6.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@v2.19.0
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
 
@@ -88,18 +88,18 @@ jobs:
               --window-size 800 400 \
               --icon-size 100 \
               --icon "build/macos/${{ env.PROJECT }}.app" 200 190 \
-              --hide-extension "build/macos/${{ env.PROJECT }}.app" \
+              --hide-extension "${{ env.PROJECT }}.app" \
               --app-drop-link 600 185 \
               "build/${{ env.PROJECT }}-macOS.dmg" \
               "build/macos/${{ env.PROJECT }}.app"
           fi
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: build-${{ runner.os }}
           path: |
-            build/windows/*.exe
+            build/*.exe
             build/*.dmg
 
   release:
@@ -108,12 +108,12 @@ jobs:
 
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v4.3.0
         with:
           path: artifacts
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v2.2.2
         with:
           files: |
             artifacts/**/*
