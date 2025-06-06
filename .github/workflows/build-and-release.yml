@@ -87,7 +87,7 @@ jobs:
               --window-pos 200 120 \
               --window-size 800 400 \
               --icon-size 100 \
-              --icon "build/macos/${{ env.PROJECT }}.app" 200 190 \
+              --icon "${{ env.PROJECT }}.app" 200 190 \
               --hide-extension "${{ env.PROJECT }}.app" \
               --app-drop-link 600 185 \
               "build/${{ env.PROJECT }}-macOS.dmg" \
